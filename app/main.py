@@ -14,6 +14,22 @@ models.Base.metadata.create_all(bind=engine)
 # 2. FastAPI 앱 인스턴스 생성
 app = FastAPI()
 
+# --- CORS 미들웨어 설정 시작 ---
+# 허용할 출처(프론트엔드 주소) 목록
+origins = [
+    "http://localhost:3000", # 로컬 개발 환경
+    "*"  # 나중에 Netlify 배포 주소를 여기에 추가하거나, 지금은 모든 주소를 허용
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"], # 모든 HTTP 메소드 허용
+    allow_headers=["*"], # 모든 HTTP 헤더 허용
+)
+# --- CORS 미들웨어 설정 끝 ---
+
 # 3. 데이터베이스 세션을 가져오는 의존성 함수
 # API 요청이 들어올 때마다 DB 세션을 생성하고, 요청 처리가 끝나면 세션을 닫습니다.
 # 이를 통해 데이터베이스 연결을 안전하고 효율적으로 관리할 수 있습니다.
