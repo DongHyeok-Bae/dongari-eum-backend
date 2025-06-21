@@ -5,7 +5,7 @@ from fastapi.staticfiles import StaticFiles
 # 우리가 직접 만든 .py 파일들에서 필요한 것들을 가져옵니다.
 from . import models
 from .database import engine
-from .routers import groups # [추가] groups 라우터를 가져옵니다.
+from .routers import groups 
 
 # 1. 데이터베이스 테이블 생성
 # 앱이 시작될 때, models.py에서 정의한 모든 테이블을 데이터베이스에 생성합니다.
@@ -15,7 +15,7 @@ models.Base.metadata.create_all(bind=engine)
 # 2. FastAPI 앱 인스턴스 생성
 app = FastAPI()
 
-# [추가] /routers/groups.py에 정의된 API 엔드포인트들을 앱에 포함시킵니다.
+# /routers/groups.py에 정의된 API 엔드포인트들을 앱에 포함시킵니다.
 app.include_router(groups.router)
 
 # static 디렉토리를 /static 경로에 마운트
