@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Depends, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from typing import List
 
@@ -13,7 +14,6 @@ models.Base.metadata.create_all(bind=engine)
 
 # 2. FastAPI 앱 인스턴스 생성
 app = FastAPI()
-
 # --- CORS 미들웨어 설정 시작 ---
 # 허용할 출처(프론트엔드 주소) 목록
 origins = [
@@ -29,6 +29,7 @@ app.add_middleware(
     allow_headers=["*"], # 모든 HTTP 헤더 허용
 )
 # --- CORS 미들웨어 설정 끝 ---
+
 
 # 3. 데이터베이스 세션을 가져오는 의존성 함수
 # API 요청이 들어올 때마다 DB 세션을 생성하고, 요청 처리가 끝나면 세션을 닫습니다.
