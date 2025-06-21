@@ -28,8 +28,9 @@ class Group(BaseModel):
     group_type: str
     topic: str
     description: Optional[str] = None
+    image_url: Optional[str] = None
 
     # 이 설정을 통해 SQLAlchemy 모델(models.py의 Group)을
     # Pydantic 모델로 자동으로 변환할 수 있게 됩니다.
     class Config:
-        orm_mode = True
+        from_attributes = True

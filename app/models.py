@@ -10,5 +10,6 @@ class Group(Base):
     name = Column(String, unique=True, index=True) # 동아리 이름 
     group_type = Column(String) # 동아리 유형 
     topic = Column(String)      # 동아리 주제 
-    description = Column(String) # 동아리 설명 
+    description = Column(String, nullable=True) # 동아리 설명 
     password = Column(String(4)) # 4자리 비밀번호
+    image_url = Column(String, nullable=True)
