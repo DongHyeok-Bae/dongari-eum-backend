@@ -4,19 +4,23 @@ from fastapi.staticfiles import StaticFiles
 
 # 우리가 직접 만든 .py 파일들에서 필요한 것들을 가져옵니다.
 from . import models
-from .database import engine
-from .routers import groups 
+from .database import engine, Base
+from .routers import clubs, auth, members, accounting, operation_logs
 
 # 1. 데이터베이스 테이블 생성
 # 앱이 시작될 때, models.py에서 정의한 모든 테이블을 데이터베이스에 생성합니다.
 # (이미 존재하면 아무 동작도 하지 않습니다.)
-models.Base.metadata.create_all(bind=engine)
+Base.metadata.create_all(bind=engine)
 
 # 2. FastAPI 앱 인스턴스 생성
 app = FastAPI()
 
-# /routers/groups.py에 정의된 API 엔드포인트들을 앱에 포함시킵니다.
-app.include_router(groups.router)
+# /routers/ 디렉터리의 각 파일에 정의된 API 엔드포인트들을 앱에 포함시킵니다.
+app.include_router(clubs.router)
+app.include_router(auth.router)
+app.include_router(members.router)
+app.include_router(accounting.router)
+app.include_router(operation_logs.router)
 
 # static 디렉토리를 /static 경로에 마운트
 app.mount("/static", StaticFiles(directory="static"), name="static")
