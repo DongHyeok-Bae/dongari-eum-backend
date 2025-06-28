@@ -16,9 +16,9 @@ class UserDB(Base):
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
-    first_name = Column(String)
-    last_name = Column(String)
-    phone_number = Column(String, nullable=True)
+    name = Column(String, nullable=False) # '이름'으로 통합
+    affiliation = Column(String, nullable=True) # '소속' 추가
+    introduction = Column(String, nullable=True) # '한 줄 소개' 추가
 
     # 사용자가 속한 동아리 목록
     clubs = relationship("ClubDB",
@@ -33,10 +33,10 @@ class ClubDB(Base):
 
     # 테이블의 컬럼(속성)들을 정의합니다.
     id = Column(Integer, primary_key=True, index=True) # 자동 생성될 고유 ID
-    name = Column(String, unique=True, index=True) # 동아리 이름 
-    club_type = Column(String) # 동아리 유형 
-    topic = Column(String)      # 동아리 주제 
-    description = Column(String, nullable=True) # 동아리 설명 
+    name = Column(String, unique=True, index=True) # 동아리 이름
+    club_type = Column(String) # 동아리 유형
+    topic = Column(String)      # 동아리 주제
+    description = Column(String, nullable=True) # 동아리 설명
     password = Column(String(4)) # 4자리 비밀번호
     image_url = Column(String, nullable=True)
 
@@ -44,10 +44,10 @@ class ClubDB(Base):
     members = relationship("UserDB",
                            secondary=user_club_association,
                            back_populates="clubs")
-                           
+
     # 이 동아리에 속한 부원 목록 (운영진이 관리)
     club_members = relationship("ClubMemberDB", back_populates="club")
-    
+
     # 이 동아리의 회계 내역 목록
     accounting_entries = relationship("AccountingEntryDB", back_populates="club", cascade="all, delete-orphan")
 
@@ -91,11 +91,11 @@ class AccountingEntryDB(Base):
 # 'posts' 테이블 모델
 class OperationLogDB(Base):
     __tablename__ = "operation_logs"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, index=True) # 제목 필드 추가
     post_type = Column(String) # 예: 'meeting_minutes', 'proposal', 'report' 등
-    
+
     # --- 새로 추가되는 컬럼 ---
     start_date = Column(Date, nullable=True)
     end_date = Column(Date, nullable=True)
@@ -105,10 +105,10 @@ class OperationLogDB(Base):
     content = Column(JSON, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-    
+
     club_id = Column(Integer, ForeignKey("clubs.id"), nullable=False)
     author_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-    
+
     club = relationship("ClubDB", back_populates="operation_logs")
     author = relationship("UserDB", back_populates="operation_logs")
     files = relationship("UploadedFileDB", back_populates="operation_log", cascade="all, delete-orphan")

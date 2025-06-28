@@ -9,9 +9,9 @@ from datetime import datetime, date
 
 class UserBase(BaseModel):
     email: str
-    first_name: Optional[str] = None
-    last_name: Optional[str] = None
-    phone_number: Optional[str] = None
+    name: str # first_name, last_name 대신 name 사용
+    affiliation: Optional[str] = None # '소속' 추가
+    introduction: Optional[str] = None # '한 줄 소개' 추가
 
 class UserCreate(UserBase):
     password: str

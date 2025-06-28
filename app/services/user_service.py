@@ -9,16 +9,16 @@ def create_user(db: Session, user_create: schemas.UserCreate) -> models.UserDB:
     """
     if db.query(models.UserDB).filter(models.UserDB.email == user_create.email).first():
         raise HTTPException(status_code=400, detail="이미 등록된 이메일입니다.")
-    
+
     hashed_password = auth.get_password_hash(user_create.password)
     db_user = models.UserDB(
         email=user_create.email,
-        hashed_password=hashed_password,
-        first_name=user_create.first_name,
-        last_name=user_create.last_name,
-        phone_number=user_create.phone_number
+        name=user_create.name, # name 필드 사용
+        affiliation=user_create.affiliation, # affiliation 필드 추가
+        introduction=user_create.introduction, # introduction 필드 추가
+        hashed_password=hashed_password
     )
     db.add(db_user)
     db.commit()
     db.refresh(db_user)
-    return db_user 
+    return db_user
