@@ -65,7 +65,7 @@ class ClubMemberDB(Base):
     major = Column(String, nullable=True)
     phone_number = Column(String, nullable=True)
     email = Column(String, nullable=True)
-    gender = Column(CHAR(1), nullable=True) # 성별 컬럼 추가 ('남' 또는 '여')
+    gender = Column(CHAR(2), nullable=True) # 성별 컬럼 추가 ('남' 또는 '여')
     member_year = Column(Integer, nullable=True) # 기수
     role = Column(String, default="부원") # 직책
     memo = Column(String, nullable=True) # 메모

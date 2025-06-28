@@ -86,3 +86,27 @@ def export_to_excel(db: Session, club_id: int):
     output.seek(0)
     
     return output, db_club.name
+
+def update_entry(db: Session, club_id: int, entry_id: int, entry_update: 'schemas.AccountingEntryUpdate'):
+    db_entry = db.query(models.AccountingEntryDB).filter(
+        models.AccountingEntryDB.id == entry_id,
+        models.AccountingEntryDB.club_id == club_id
+    ).first()
+    if not db_entry:
+        raise HTTPException(status_code=404, detail="해당 회계 내역을 찾을 수 없습니다.")
+    for field, value in entry_update.dict(exclude_unset=True).items():
+        setattr(db_entry, field, value)
+    db.commit()
+    db.refresh(db_entry)
+    return db_entry
+
+def delete_entry(db: Session, club_id: int, entry_id: int):
+    db_entry = db.query(models.AccountingEntryDB).filter(
+        models.AccountingEntryDB.id == entry_id,
+        models.AccountingEntryDB.club_id == club_id
+    ).first()
+    if not db_entry:
+        raise HTTPException(status_code=404, detail="해당 회계 내역을 찾을 수 없습니다.")
+    db.delete(db_entry)
+    db.commit()
+    return None

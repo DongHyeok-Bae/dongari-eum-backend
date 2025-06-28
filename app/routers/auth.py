@@ -32,12 +32,4 @@ async def login_for_access_token(db: Session = Depends(get_db), form_data: OAuth
             headers={"WWW-Authenticate": "Bearer"},
         )
     
-    return auth_service.create_token_for_user(user=user)
-
-
-@router.get("/users/me", response_model=schemas.User)
-async def read_users_me(current_user: schemas.User = Depends(auth_utils.get_current_active_user)):
-    """
-    현재 로그인된 사용자의 정보를 반환합니다.
-    """
-    return current_user 
+    return auth_service.create_token_for_user(user=user) 

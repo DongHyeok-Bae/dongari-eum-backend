@@ -70,3 +70,27 @@ def get_accounting_entries(
     if not db_club:
         raise HTTPException(status_code=404, detail="해당 동아리를 찾을 수 없습니다.")
     return db_club.accounting_entries 
+
+@router.patch("/{entry_id}", response_model=schemas.AccountingEntry)
+def update_accounting_entry(
+    club_id: int,
+    entry_id: int,
+    entry_update: schemas.AccountingEntryUpdate,
+    db: Session = Depends(get_db)
+):
+    """
+    특정 회계 내역을 수정합니다.
+    """
+    return accounting_service.update_entry(db=db, club_id=club_id, entry_id=entry_id, entry_update=entry_update)
+
+@router.delete("/{entry_id}", status_code=204)
+def delete_accounting_entry(
+    club_id: int,
+    entry_id: int,
+    db: Session = Depends(get_db)
+):
+    """
+    특정 회계 내역을 삭제합니다.
+    """
+    accounting_service.delete_entry(db=db, club_id=club_id, entry_id=entry_id)
+    return None 

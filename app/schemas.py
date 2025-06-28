@@ -42,12 +42,13 @@ class ClubJoin(BaseModel):
     password: str
 
 # Club 스키마에 members 필드 추가
-class Club(ClubBase):
+class Club(BaseModel):
     id: int
-    members: List[User] = []
-    club_members: List['ClubMember'] = []
-    accounting_entries: List['AccountingEntry'] = []
-    operation_logs: List['OperationLog'] = []
+    name: str
+    image_url: Optional[str] = None
+    description: Optional[str] = None
+    club_type: str
+    topic: str
 
     class Config:
         from_attributes = True
@@ -116,6 +117,13 @@ class AccountingEntry(AccountingEntryBase):
     class Config:
         from_attributes = True
 
+class AccountingEntryUpdate(BaseModel):
+    date: Optional[str] = None
+    manager: Optional[str] = None
+    description: Optional[str] = None
+    amount: Optional[int] = None
+    # 사진 수정은 별도 처리(프론트에서 파일 업로드로)
+
 # --- UploadedFile ---
 class UploadedFile(BaseModel):
     id: int
@@ -148,3 +156,7 @@ class OperationLogCreate(OperationLogBase):
 # User와 Club 스키마가 서로 참조할 수 있도록 업데이트
 User.model_rebuild()
 Club.model_rebuild()
+
+class JoinClubResponse(BaseModel):
+    message: str
+    club_id: int

@@ -48,32 +48,26 @@ def get_clubs(
         return club_service.search_clubs_by_name(db=db, name=name)
     return club_service.get_all_clubs(db=db)
 
-@router.post("/join")
+@router.post("/join", response_model=schemas.JoinClubResponse)
 def join_club(join_request: schemas.ClubJoin, db: Session = Depends(get_db)):
     """
     이름과 비밀번호로 특정 동아리에 참여합니다.
     """
     db_club = club_service.join_club(db=db, join_request=join_request)
-    content = {"message": "가입에 성공했습니다.", "club_id": db_club.id}
-    return JSONResponse(content=content, status_code=200)
+    return {"message": "가입에 성공했습니다.", "club_id": db_club.id}
 
 @router.get("/{club_id}", response_model=schemas.Club)
 def get_club_by_id(club_id: int, db: Session = Depends(get_db)):
     """
-    ID로 특정 동아리의 상세 정보를 조회합니다.
+    ID로 특정 동아리의 id, name, image_url, description, club_type, topic을 반환합니다.
     """
-    return club_service.get_club_by_id(db=db, club_id=club_id)
-
-@router.put("/{club_id}")
-def update_club(club_id: int):
-    # Implementation of the update_club function
-    pass
-
-    return {}  # Placeholder return, actual implementation needed
-
-@router.delete("/{club_id}")
-def delete_club(club_id: int):
-    # Implementation of the delete_club function
-    pass
-
-    return {}  # Placeholder return, actual implementation needed 
+    club = club_service.get_club_by_id(db=db, club_id=club_id)
+    # 필요한 필드만 추출해서 반환
+    return {
+        "id": club.id,
+        "name": club.name,
+        "image_url": club.image_url,
+        "description": club.description,
+        "club_type": club.club_type,
+        "topic": club.topic
+    } 
