@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional, List, Dict, Any, Union
 from datetime import datetime, date
 
@@ -35,7 +35,7 @@ class ClubBase(BaseModel):
     image_url: Optional[str] = None
 
 class ClubCreate(ClubBase):
-    password: str
+    password: str = Field(default="111111")
 
 class ClubJoin(BaseModel):
     name: str
@@ -61,6 +61,7 @@ class ClubMemberBase(BaseModel):
     major: Optional[str] = None
     phone_number: Optional[str] = None
     email: Optional[str] = None
+    gender: Optional[str] = None # 성별 필드 추가
     member_year: Optional[int] = None
     role: Optional[str] = "부원"
     memo: Optional[str] = None
@@ -82,6 +83,7 @@ class ClubMemberUpdate(BaseModel):
     major: Optional[str] = None
     phone_number: Optional[str] = None
     email: Optional[str] = None
+    gender: Optional[str] = None # 성별 필드 추가
     member_year: Optional[int] = None
     role: Optional[str] = None
     memo: Optional[str] = None

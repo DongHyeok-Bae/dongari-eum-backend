@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Table, ForeignKey, DateTime, JSON, Date
+from sqlalchemy import Column, Integer, String, Table, ForeignKey, DateTime, JSON, Date, CHAR
 from sqlalchemy.orm import relationship
 from .database import Base # 방금 만든 database.py에서 Base를 가져옵니다.
 from datetime import datetime
@@ -37,7 +37,7 @@ class ClubDB(Base):
     club_type = Column(String) # 동아리 유형
     topic = Column(String)      # 동아리 주제
     description = Column(String, nullable=True) # 동아리 설명
-    password = Column(String(4)) # 4자리 비밀번호
+    password = Column(String) # 4자리 비밀번호 -> 길이 제한 제거
     image_url = Column(String, nullable=True)
 
     # 동아리에 속한 사용자(멤버) 목록
@@ -65,6 +65,7 @@ class ClubMemberDB(Base):
     major = Column(String, nullable=True)
     phone_number = Column(String, nullable=True)
     email = Column(String, nullable=True)
+    gender = Column(CHAR(1), nullable=True) # 성별 컬럼 추가 ('남' 또는 '여')
     member_year = Column(Integer, nullable=True) # 기수
     role = Column(String, default="부원") # 직책
     memo = Column(String, nullable=True) # 메모

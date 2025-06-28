@@ -45,8 +45,8 @@ def create_club(
     if db.query(models.ClubDB).filter(models.ClubDB.name == name).first():
         raise HTTPException(status_code=400, detail="이미 존재하는 동아리 이름입니다.")
     
-    if not (password.isdigit() and len(password) == 4):
-        raise HTTPException(status_code=400, detail="비밀번호는 4자리 숫자여야 합니다.")
+    if not (password.isdigit() and len(password) == 6):
+        raise HTTPException(status_code=400, detail="비밀번호는 6자리 숫자여야 합니다.")
 
     image_url_path = _save_club_image(file)
 
